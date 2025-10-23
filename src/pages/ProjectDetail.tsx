@@ -58,7 +58,7 @@ const ProjectDetail: React.FC = () => {
   const taskCounts = {
     all: tasks.length,
     pending: tasks.filter(t => t.status === 'pending').length,
-    blocked: tasks.filter(t => t.status === 'inprogress').length,
+    inprogress: tasks.filter(t => t.status === 'inprogress').length,
     completed: tasks.filter(t => t.status === 'completed').length,
   };
 
@@ -110,7 +110,7 @@ const ProjectDetail: React.FC = () => {
               }`}
             >
               In Progress
-              <span className="ml-2 text-sm">({taskCounts['blocked']})</span>
+              <span className="ml-2 text-sm">({taskCounts['inprogress']})</span>
             </button>
             <button
               onClick={() => setStatusFilter('completed')}
