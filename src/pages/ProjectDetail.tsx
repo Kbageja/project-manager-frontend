@@ -11,6 +11,7 @@ const ProjectDetail: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<Task['status'] | 'all'>('all');
 
   useEffect(() => {
     if (projectId) loadTasks();
@@ -38,8 +39,6 @@ const ProjectDetail: React.FC = () => {
     }
   };
 
-
-
   const handleDelete = async (taskId: string) => {
     if (!confirm('Delete this task?')) return;
     try {
@@ -48,6 +47,19 @@ const ProjectDetail: React.FC = () => {
     } catch (err) {
       alert('Failed to delete task');
     }
+  };
+
+  // Filter tasks based on selected status
+  const filteredTasks = statusFilter === 'all' 
+    ? tasks 
+    : tasks.filter(task => task.status === statusFilter);
+
+  // Get task count for each status
+  const taskCounts = {
+    all: tasks.length,
+    pending: tasks.filter(t => t.status === 'pending').length,
+    blocked: tasks.filter(t => t.status === 'blocked').length,
+    completed: tasks.filter(t => t.status === 'completed').length,
   };
 
   return (
@@ -63,15 +75,69 @@ const ProjectDetail: React.FC = () => {
             Add Task
           </button>
         </div>
+
+        {/* Filter Tabs */}
+        <div className="bg-white rounded-lg shadow-sm p-2 mb-6">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setStatusFilter('all')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                statusFilter === 'all'
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              All Tasks
+              <span className="ml-2 text-sm">({taskCounts.all})</span>
+            </button>
+            <button
+              onClick={() => setStatusFilter('pending')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                statusFilter === 'pending'
+                  ? 'bg-yellow-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Pending
+              <span className="ml-2 text-sm">({taskCounts.pending})</span>
+            </button>
+            <button
+              onClick={() => setStatusFilter('blocked')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                statusFilter === 'blocked'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Blocked
+              <span className="ml-2 text-sm">({taskCounts['blocked']})</span>
+            </button>
+            <button
+              onClick={() => setStatusFilter('completed')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                statusFilter === 'completed'
+                  ? 'bg-green-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Completed
+              <span className="ml-2 text-sm">({taskCounts.completed})</span>
+            </button>
+          </div>
+        </div>
+
         {loading ? (
           <div className="text-center py-12">Loading tasks...</div>
-        ) : tasks.length === 0 ? (
+        ) : filteredTasks.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
-            No tasks yet. Click "Add Task" to create one.
+            {statusFilter === 'all' 
+              ? 'No tasks yet. Click "Add Task" to create one.'
+              : `No ${statusFilter} tasks found.`
+            }
           </div>
         ) : (
           <div className="space-y-4">
-            {tasks.map((task) => (
+            {filteredTasks.map((task) => (
               <TaskCard
                 key={task._id}
                 task={task}
@@ -86,4 +152,5 @@ const ProjectDetail: React.FC = () => {
     </div>
   );
 };
+
 export default ProjectDetail;
