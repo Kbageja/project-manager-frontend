@@ -23,7 +23,7 @@ export interface Task {
   _id: string;
   title: string;
   description: string;
-  status: 'pending' | 'completed' | 'blocked';
+  status: 'pending' | 'completed' | 'inprogress';
   dueDate?: string;
   projectId: string;
 }

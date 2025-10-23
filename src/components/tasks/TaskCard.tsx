@@ -8,7 +8,7 @@ const TaskCard: React.FC<{
   const statusColors = {
     pending: 'bg-yellow-100 text-yellow-800',
     completed: 'bg-green-100 text-green-800',
-    blocked: 'bg-red-100 text-red-800',
+    inprogress: 'bg-red-100 text-red-800',
   };
 
   return (
@@ -37,7 +37,7 @@ const TaskCard: React.FC<{
         >
           <option value="pending">Pending</option>
           <option value="completed">Completed</option>
-          <option value="blocked">Blocked</option>
+          <option value="inprogress">In progress</option>
         </select>
       </div>
     </div>
