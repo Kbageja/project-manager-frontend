@@ -100,6 +100,17 @@ async createProject(name: string, description: string): Promise<Project> {
     return res.json();
   }
 
+    async updateAllProject(projectId: string, updates: Partial<Project>): Promise<Project> {
+    const res = await fetch(`${API_BASE_URL}/projects/updateAll`, {
+      method: 'PUT',
+      headers: this.getAuthHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ projectId, ...updates }),
+    });
+    if (!res.ok) throw new Error('Failed to update task');
+    return res.json();
+  }
+
 async fetchTasks(projectId: string): Promise<Task[]> {
   const res = await fetch(
     `${API_BASE_URL}/tasks/fetchtasks?projectId=${projectId}`,
@@ -133,6 +144,17 @@ async fetchTasks(projectId: string): Promise<Task[]> {
 
   async updateTask(taskId: string, updates: Partial<Task>): Promise<Task> {
     const res = await fetch(`${API_BASE_URL}/tasks/update`, {
+      method: 'PUT',
+      headers: this.getAuthHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ taskId, ...updates }),
+    });
+    if (!res.ok) throw new Error('Failed to update task');
+    return res.json();
+  }
+
+    async updateAllTask(taskId: string, updates: Partial<Task>): Promise<Task> {
+    const res = await fetch(`${API_BASE_URL}/tasks/updateTaskAll`, {
       method: 'PUT',
       headers: this.getAuthHeaders(),
       credentials: 'include',
